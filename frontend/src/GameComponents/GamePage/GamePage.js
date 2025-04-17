@@ -2,8 +2,16 @@ import GameCanvas from "../GameCanvas/GameCanvas";
 import Option from "../Option/Option";
 import { useState, useEffect } from "react";
 import "./GamePage.css";
+import useSound from 'use-sound';
+
+import engineSoud from "../../site-sounds/engine-47745.mp3";
+import brakeSoud from "../../site-sounds/brake-6315.mp3";
+
 
 function GamePage() {
+  const [playEngineSound] = useSound(engineSoud);
+  const [playBrakeSound] = useSound(brakeSoud);
+
   const [questions, setQuestions] = useState([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -15,6 +23,8 @@ function GamePage() {
   const [showWinMessage, setShowWinMessage] = useState(false); 
   const [isCorrect, setIsCorrect] = useState(null);
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
+
+  
 
   // Fetch questions from backend
   useEffect(() => {
@@ -52,6 +62,7 @@ function GamePage() {
 
   // Function to move to next question
   const nextQuestion = () => {
+
     if (activeQuestionIndex < questions.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1);
     } else {
@@ -81,9 +92,11 @@ function GamePage() {
       setScore(score + 10);
       setIsCorrect(true);
       nextQuestion();
+      playEngineSound();
     } else {
       setIsCorrect(false);
       setScore(score - 10);
+      playBrakeSound();
     }
   };
 
