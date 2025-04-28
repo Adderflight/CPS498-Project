@@ -44,7 +44,7 @@ function Form() {
         password: "",
         password2: "",
       });
-      navigate("/landing"); 
+      setActiveTab("login"); // Redirect to the login tab
     } else {
       alert(`Error: ${responseText}`);
     }

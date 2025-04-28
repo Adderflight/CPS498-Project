@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
+import "../styles/ScoresPage.css";
 import "../styles/LandingPage.css";
 import MRLogo from "../site-images/MRLogo.png";
 import ButtonWithSound from "../components/ButtonWithSound";
@@ -417,6 +418,48 @@ function LandingPage() {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (navigationStack.includes("highScores")) {
+      fetch(`http://localhost:8080/scores/user/${userID}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch scores");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setScores(data);
+          setLoading(false);
+
+          // Calculate total score
+          const total = data.reduce((sum, game) => sum + game.score, 0);
+          setTotalScore(total);
+        })
+        .catch((error) => {
+          console.error("Error fetching scores:", error);
+          setLoading(false);
+        });
+    }
+
+    if (navigationStack.includes("leaderboard")) {
+      fetch("http://localhost:8080/scores/leaderboard")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch leaderboard");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setLeaderboard(data);
+          setLoadingLeaderboard(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching leaderboard:", error);
+          setLoadingLeaderboard(false);
+        });
+    }
+  }, [navigationStack, userID]);
 
   return (
     <div className="landing-page">
