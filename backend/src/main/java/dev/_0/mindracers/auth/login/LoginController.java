@@ -53,13 +53,18 @@ public class LoginController {
 
       User user = userOptional.get();
 
-      if (username != null && !username.isEmpty()) {
+      // Validate and update username
+      if (username != null && !username.trim().isEmpty()) {
           user.setUsername(username);
       }
-      if (email != null && !email.isEmpty()) {
+
+      // Validate and update email
+      if (email != null && !email.trim().isEmpty() && email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
           user.setEmail(email);
       }
-      if (password != null && !password.isEmpty()) {
+
+      // Validate and update password
+      if (password != null && !password.trim().isEmpty() && password.length() >= 6) {
           user.setPassword(password);
       }
 

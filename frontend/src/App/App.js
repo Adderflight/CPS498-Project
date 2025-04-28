@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Home from "../Home/Home.js";
 import GamePage from "../GameComponents/GamePage/GamePage";
 import LandingPage from "../Home/LandingPage";
-import ScoresPage from "../Home/ScoresPage.js";
-import ProfilePage from "../Home/ProfilePage.js";
 import GameOverPage from "../GameComponents/GameOverPage/GameOverPage";
 import { Routes, Route, useLocation } from "react-router-dom";
 import MusicPlayer from "../components/MusicPlayer";
@@ -30,8 +28,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/game" element={<GamePage />} />
-        <Route path="/scores" element={<ScoresPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/game-over" element={<GameOverPage />} />
       </Routes>
     </div>

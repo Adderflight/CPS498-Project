@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
 import "../styles/LandingPage.css";
-import "../styles/ScoresPage.css"; // Import styles for scores
 import MRLogo from "../site-images/MRLogo.png";
 import ButtonWithSound from "../components/ButtonWithSound";
 
@@ -53,17 +52,19 @@ function LandingPage() {
     };
 
     if (["easy", "medium", "hard"].includes(menu)) {
-      // Map difficulty to numeric value and navigate to GamePage
       const numericDifficulty = difficultyMap[menu];
       navigate("/game", { state: { difficulty: numericDifficulty } });
       return;
     }
 
     if (menu === "logout") {
-      // Clear user session data and navigate to the login page
       localStorage.removeItem("userID");
       navigate("../");
       return;
+    }
+
+    if (["changeUsername", "changeEmail", "changePassword"].includes(menu)) {
+      setActiveForm(menu.replace("change", "").toLowerCase()); // Set active form
     }
 
     setNavigationStack((prev) => {
@@ -73,48 +74,6 @@ function LandingPage() {
       if (parentIndex === -1) return ["default", menu];
       return [...prev.slice(0, parentIndex + 1), menu];
     });
-
-    // Fetch scores when navigating to "highScores"
-    if (menu === "highScores") {
-      fetch(`http://localhost:8080/scores/user/${userID}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch scores");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setScores(data);
-          setLoading(false);
-
-          // Calculate total score
-          const total = data.reduce((sum, game) => sum + game.score, 0);
-          setTotalScore(total);
-        })
-        .catch((error) => {
-          console.error("Error fetching scores:", error);
-          setLoading(false);
-        });
-    }
-
-    // Fetch leaderboard when navigating to "leaderboard"
-    if (menu === "leaderboard") {
-      fetch("http://localhost:8080/scores/leaderboard")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch leaderboard");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setLeaderboard(data);
-          setLoadingLeaderboard(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching leaderboard:", error);
-          setLoadingLeaderboard(false);
-        });
-    }
   };
 
   const handleBackClick = () =>
@@ -126,23 +85,19 @@ function LandingPage() {
   };
 
   const validateInput = () => {
-    if (activeForm === "username") {
-      if (!formData.username || formData.username.trim().length < 3) {
-        setMessage("Username must be at least 3 characters long and cannot be empty.");
-        return false;
-      }
+    if (activeForm === "username" && (!formData.username || formData.username.trim().length < 3)) {
+      setMessage("Username must be at least 3 characters long.");
+      return false;
     }
 
-    if (activeForm === "email") {
-      if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        setMessage("Please enter a valid email address.");
-        return false;
-      }
+    if (activeForm === "email" && (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))) {
+      setMessage("Please enter a valid email address.");
+      return false;
     }
 
     if (activeForm === "password") {
       if (!formData.password || formData.password.length < 6) {
-        setMessage("Password must be at least 6 characters long and cannot be empty.");
+        setMessage("Password must be at least 6 characters long.");
         return false;
       }
       if (formData.password !== formData.confirmPassword) {
@@ -157,15 +112,21 @@ function LandingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure userID is valid
-    if (!userID) {
-      setMessage("Session expired. Please log in again.");
-      navigate("/login");
+    if (!validateInput()) {
       return;
     }
 
-    if (!validateInput()) {
-      return;
+    const urlData = new URLSearchParams();
+    urlData.append("userID", userID);
+
+    if (activeForm === "username") {
+      urlData.append("username", formData.username);
+    }
+    if (activeForm === "email") {
+      urlData.append("email", formData.email);
+    }
+    if (activeForm === "password") {
+      urlData.append("password", formData.password);
     }
 
     try {
@@ -174,12 +135,7 @@ function LandingPage() {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams({
-          userID: parseInt(userID, 10), // Ensure userID is passed as an integer
-          username: activeForm === "username" ? formData.username : undefined,
-          email: activeForm === "email" ? formData.email : undefined,
-          password: activeForm === "password" ? formData.password : undefined,
-        }),
+        body: urlData,
       });
 
       if (response.ok) {
