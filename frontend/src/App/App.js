@@ -3,6 +3,7 @@ import Home from "../Home/Home.js";
 import GamePage from "../GameComponents/GamePage/GamePage";
 import LandingPage from "../Home/LandingPage";
 import GameOverPage from "../GameComponents/GameOverPage/GameOverPage";
+import AttributionPage from "../Attribution/AttributionPage";
 import { Routes, Route, useLocation } from "react-router-dom";
 import MusicPlayer from "../components/MusicPlayer";
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/game" element={<GamePage />} />
         <Route path="/game-over" element={<GameOverPage />} />
+        <Route path="/attribution" element={<AttributionPage />} />
       </Routes>
     </div>
   );

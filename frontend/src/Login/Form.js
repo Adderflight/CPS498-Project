@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/Form.css";
 import "../styles/global.css";
 import ButtonWithSound from "../components/ButtonWithSound";
@@ -250,6 +250,11 @@ function Form() {
             </ButtonWithSound>
           </form>
         </div>
+      </div>
+      <div className="bottom-right-container">
+        <Link to="/attribution" className="attribution-link">
+          Attribution
+        </Link>
       </div>
     </div>
   );

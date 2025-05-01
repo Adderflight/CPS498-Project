@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/global.css";
 import "../styles/ScoresPage.css";
 import "../styles/LandingPage.css";
@@ -475,6 +475,11 @@ function LandingPage() {
         {navigationStack.map((menu, idx) => (
           <div key={idx}>{renderMenu(menu)}</div>
         ))}
+      </div>
+      <div className="bottom-right-container">
+        <Link to="/attribution" className="attribution-link">
+          Attribution
+        </Link>
       </div>
     </div>
   );

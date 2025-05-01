@@ -1,0 +1,25 @@
+.attribution-page {
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+  color: rgb(113, 34, 5);
+}
+
+.attribution-page h1 {
+  font-size: 72px;
+  margin-bottom: 20px;
+}
+
+.attribution-page p, 
+.attribution-page ul, 
+.attribution-page li {
+  font-size: 30px;
+}
+
+.attribution-page ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.attribution-page li {
+  margin-bottom: 10px;
+}

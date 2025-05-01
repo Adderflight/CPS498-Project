@@ -89,5 +89,21 @@ input:focus, textarea:focus {
 }
 
 button.button-block {
-  margin-top: 20px; /* Add spacing above the button */
+  margin-top: 20px; 
+}
+
+.bottom-right-container {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 24px;
+}
+
+.attribution-link {
+  color: rgb(113, 34, 5);
+  text-decoration: none;
+}
+
+.attribution-link:hover {
+  text-decoration: underline;
 }
